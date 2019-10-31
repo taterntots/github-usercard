@@ -52,31 +52,31 @@
   bigknell
 */
 
-// axios.get('https://api.github.com/users/taterntots')
-//   .then(response => {
-//     console.log(response);
-//     const myInfo = response.data;
-//     // console.log(myInfo);
-
-//     const entryPoint = document.querySelector('.cards');
-//     const cardInfo = gitUserCard(myInfo);
-//     entryPoint.appendChild(cardInfo);
-//   })
-//   .catch(error => {
-//     console.log('Why does god hate me?', error)
-//   })
-
-const followersArray = ['lyndsiWilliams', 'spencer-mcguire', 'wsu718', 'cmruss', 'squashgray'];
-
-followersArray.forEach((user) => {
-  axios.get(`https://api.github.com/users/${user}`)
+axios.get('https://api.github.com/users/taterntots')
   .then(response => {
     console.log(response);
+    const myInfo = response.data;
+    // console.log(myInfo);
+
     const entryPoint = document.querySelector('.cards');
-    const newUserCard = gitUserCard(response.data);
-    entryPoint.appendChild(newUserCard);
+    const cardInfo = gitUserCard(myInfo);
+    entryPoint.appendChild(cardInfo);
   })
-})
+  .catch(error => {
+    console.log('Why does god hate me?', error)
+  })
+
+// const followersArray = ['lyndsiWilliams', 'spencer-mcguire', 'wsu718', 'cmruss', 'squashgray'];
+
+// followersArray.forEach((user) => {
+//   axios.get(`https://api.github.com/users/${user}`)
+//   .then(response => {
+//     console.log(response);
+//     const entryPoint = document.querySelector('.cards');
+//     const newUserCard = gitUserCard(response.data);
+//     entryPoint.appendChild(newUserCard);
+//   })
+// })
 
 function gitUserCard(object) {
   const userImg = document.createElement('img');
@@ -102,7 +102,6 @@ function gitUserCard(object) {
   newCardInfo.appendChild(username);
   newCardInfo.appendChild(location);
   newCardInfo.appendChild(profile);
-  profile.appendChild(githubUrl);
   newCardInfo.appendChild(followers);
   newCardInfo.appendChild(following);
   newCardInfo.appendChild(bio);
@@ -111,9 +110,12 @@ function gitUserCard(object) {
   name.textContent = object.name;
   username.textContent = object.login;
   location.textContent = `Location: ${object.location}`;
-  profile.textContent = `Profile: ${githubUrl.textContent}`;
-  githubUrl.textContent = githubUrl.href;
+
+  profile.textContent = `Profile: `;
+  profile.appendChild(githubUrl);
+  githubUrl.textContent = object.html_url;
   githubUrl.href = object.html_url;
+
   followers.textContent = `Followers: ${object.followers}`;
   following.textContent = `Following: ${object.following}`;
   bio.textContent = `Bio: ${object.bio}`;
