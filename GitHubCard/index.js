@@ -24,8 +24,6 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
 
@@ -54,21 +52,31 @@ const followersArray = [];
   bigknell
 */
 
-axios.get('https://api.github.com/users/taterntots')
+// axios.get('https://api.github.com/users/taterntots')
+//   .then(response => {
+//     console.log(response);
+//     const myInfo = response.data;
+//     // console.log(myInfo);
+
+//     const entryPoint = document.querySelector('.cards');
+//     const cardInfo = gitUserCard(myInfo);
+//     entryPoint.appendChild(cardInfo);
+//   })
+//   .catch(error => {
+//     console.log('Why does god hate me?', error)
+//   })
+
+const followersArray = ['lyndsiWilliams', 'spencer-mcguire', 'wsu718', 'cmruss', 'squashgray'];
+
+followersArray.forEach((user) => {
+  axios.get(`https://api.github.com/users/${user}`)
   .then(response => {
     console.log(response);
-    const myInfo = response.data;
-    console.log(myInfo);
-
     const entryPoint = document.querySelector('.cards');
-    const cardInfo = gitUserCard(myInfo);
-    entryPoint.appendChild(cardInfo);
-
-    // response.data.forEach(item => {
-    //   const newUser = gitUserCard(item);
-    //   entryPoint.appendChild(newUser);
-    // })
+    const newUserCard = gitUserCard(response.data);
+    entryPoint.appendChild(newUserCard);
   })
+})
 
 function gitUserCard(object) {
   const userImg = document.createElement('img');
@@ -94,17 +102,18 @@ function gitUserCard(object) {
   newCardInfo.appendChild(username);
   newCardInfo.appendChild(location);
   newCardInfo.appendChild(profile);
+  profile.appendChild(githubUrl);
   newCardInfo.appendChild(followers);
   newCardInfo.appendChild(following);
   newCardInfo.appendChild(bio);
-  profile.appendChild(githubUrl);
 
   userImg.src = object.avatar_url;
   name.textContent = object.name;
   username.textContent = object.login;
   location.textContent = `Location: ${object.location}`;
-  profile.textContent = 'Profile: ';
-  githubUrl.textContent = object.html_url;
+  profile.textContent = `Profile: ${githubUrl.textContent}`;
+  githubUrl.textContent = githubUrl.href;
+  githubUrl.href = object.html_url;
   followers.textContent = `Followers: ${object.followers}`;
   following.textContent = `Following: ${object.following}`;
   bio.textContent = `Bio: ${object.bio}`;
