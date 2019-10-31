@@ -3,11 +3,6 @@
            https://api.github.com/users/<your name>
 */
 
-axios.get("https://api.github.com/users/taterntots")
-  .then(response => {
-    console.log(response);
-  })
-
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -58,3 +53,50 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+axios.get('https://api.github.com/users/taterntots')
+  .then(response => {
+    console.log(response);
+  })
+
+function gitUserCard(object) {
+  const userImg = document.createElement('img');
+  const newCard = document.createElement('div');
+  const newCardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const githubUrl = document.createElement('a href');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  newCard.classList.add('card');
+  newCardInfo.classList.add('card-info');
+  name.classList.add('name');
+  username.classList.add('username');
+
+  newCard.appendChild(userImg);
+  newCard.appendChild(newCardInfo);
+  newCardInfo.appendChild(name);
+  newCardInfo.appendChild(username);
+  newCardInfo.appendChild(location);
+  newCardInfo.appendChild(profile);
+  newCardInfo.appendChild(followers);
+  newCardInfo.appendChild(following);
+  newCardInfo.appendChild(bio);
+  profile.appendChild(githubUrl);
+
+  userImg.src = data.avatar_url;
+  name.textContent = data.name;
+  username.textContent = data.login;
+  location.textContent = `Location: ${data.location}`;
+  profile.textContent = 'Profile: ';
+  githubUrl.textContent = data.html_url;
+  followers.textContent = `Followers: ${data.followers}`;
+  following.textContent = `Following: ${data.following}`;
+  bio.textContent = `Bio: ${data.bio}`;
+
+  return newCard;
+}
