@@ -24,8 +24,6 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
-
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
 
@@ -53,3 +51,97 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+//CREATES A CARD FOR MY OWN GITHUB
+// axios.get('https://api.github.com/users/taterntots')
+//   .then(response => {
+//     // console.log(response);
+//     const myInfo = response.data;
+//     // console.log(myInfo);
+//     // const obj = Object.entries(myInfo.followers_url);
+//     // console.log(obj);
+
+//     const entryPoint = document.querySelector('.cards');
+//     const cardInfo = gitUserCard(myInfo);
+//     entryPoint.appendChild(cardInfo);
+//   })
+//   .catch(error => {
+//     console.log('Why does god hate me?', error)
+//   })
+
+//FORE EACH ARRAY THAT MANUALLY CYCLES THROUGH FOLLOWERS
+// const followersArray = ['lyndsiWilliams', 'spencer-mcguire', 'wsu718', 'cmruss', 'squashgray'];
+
+// followersArray.forEach((user) => {
+//   axios.get(`https://api.github.com/users/${user}`)
+//   .then(response => {
+//     console.log(response);
+//     const entryPoint = document.querySelector('.cards');
+//     const newUserCard = gitUserCard(response.data);
+//     entryPoint.appendChild(newUserCard);
+//   })
+// })
+
+//STRETCH GOAL: CREATE CARDS PROGRAMMATICALLY
+axios.get('https://api.github.com/users/taterntots/followers')
+  .then(response => {
+    // console.log(response);
+    response.data.forEach(item => {
+      // console.log(item);
+      axios.get(`https://api.github.com/users/${item.login}`)
+      .then(response => {
+        const entryPoint = document.querySelector('.cards');
+        const cardInfo = gitUserCard(response.data);
+        entryPoint.appendChild(cardInfo);
+      })
+    })
+  })
+  .catch(error => {
+    console.log('Why does god hate me?', error)
+  })
+
+//Function Component
+function gitUserCard(object) {
+  const userImg = document.createElement('img');
+  const newCard = document.createElement('div');
+  const newCardInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const githubUrl = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+
+  newCard.classList.add('card');
+  newCardInfo.classList.add('card-info');
+  name.classList.add('name');
+  username.classList.add('username');
+
+  newCard.appendChild(userImg);
+  newCard.appendChild(newCardInfo);
+  newCardInfo.appendChild(name);
+  newCardInfo.appendChild(username);
+  newCardInfo.appendChild(location);
+  newCardInfo.appendChild(profile);
+  newCardInfo.appendChild(followers);
+  newCardInfo.appendChild(following);
+  newCardInfo.appendChild(bio);
+
+  userImg.src = object.avatar_url;
+  name.textContent = object.name;
+  username.textContent = object.login;
+  location.textContent = `Location: ${object.location}`;
+
+  profile.textContent = `Profile: `;
+  profile.appendChild(githubUrl);
+  githubUrl.textContent = object.html_url;
+  githubUrl.href = object.html_url;
+
+  followers.textContent = `Followers: ${object.followers}`;
+  following.textContent = `Following: ${object.following}`;
+  bio.textContent = `Bio: ${object.bio}`;
+
+  return newCard;
+}
