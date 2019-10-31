@@ -52,20 +52,24 @@
   bigknell
 */
 
-axios.get('https://api.github.com/users/taterntots')
-  .then(response => {
-    console.log(response);
-    const myInfo = response.data;
-    // console.log(myInfo);
+//CREATES A CARD FOR MY OWN GITHUB
+// axios.get('https://api.github.com/users/taterntots')
+//   .then(response => {
+//     // console.log(response);
+//     const myInfo = response.data;
+//     // console.log(myInfo);
+//     // const obj = Object.entries(myInfo.followers_url);
+//     // console.log(obj);
 
-    const entryPoint = document.querySelector('.cards');
-    const cardInfo = gitUserCard(myInfo);
-    entryPoint.appendChild(cardInfo);
-  })
-  .catch(error => {
-    console.log('Why does god hate me?', error)
-  })
+//     const entryPoint = document.querySelector('.cards');
+//     const cardInfo = gitUserCard(myInfo);
+//     entryPoint.appendChild(cardInfo);
+//   })
+//   .catch(error => {
+//     console.log('Why does god hate me?', error)
+//   })
 
+//FORE EACH ARRAY THAT MANUALLY CYCLES THROUGH FOLLOWERS
 // const followersArray = ['lyndsiWilliams', 'spencer-mcguire', 'wsu718', 'cmruss', 'squashgray'];
 
 // followersArray.forEach((user) => {
@@ -78,6 +82,25 @@ axios.get('https://api.github.com/users/taterntots')
 //   })
 // })
 
+//STRETCH GOAL: CREATE CARDS PROGRAMMATICALLY
+axios.get('https://api.github.com/users/taterntots/followers')
+  .then(response => {
+    // console.log(response);
+    response.data.forEach(item => {
+      // console.log(item);
+      axios.get(`https://api.github.com/users/${item.login}`)
+      .then(response => {
+        const entryPoint = document.querySelector('.cards');
+        const cardInfo = gitUserCard(response.data);
+        entryPoint.appendChild(cardInfo);
+      })
+    })
+  })
+  .catch(error => {
+    console.log('Why does god hate me?', error)
+  })
+
+//Function Component
 function gitUserCard(object) {
   const userImg = document.createElement('img');
   const newCard = document.createElement('div');
