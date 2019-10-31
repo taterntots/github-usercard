@@ -57,6 +57,17 @@ const followersArray = [];
 axios.get('https://api.github.com/users/taterntots')
   .then(response => {
     console.log(response);
+    const myInfo = response.data;
+    console.log(myInfo);
+
+    const entryPoint = document.querySelector('.cards');
+    const cardInfo = gitUserCard(myInfo);
+    entryPoint.appendChild(cardInfo);
+
+    // response.data.forEach(item => {
+    //   const newUser = gitUserCard(item);
+    //   entryPoint.appendChild(newUser);
+    // })
   })
 
 function gitUserCard(object) {
@@ -67,7 +78,7 @@ function gitUserCard(object) {
   const username = document.createElement('p');
   const location = document.createElement('p');
   const profile = document.createElement('p');
-  const githubUrl = document.createElement('a href');
+  const githubUrl = document.createElement('a');
   const followers = document.createElement('p');
   const following = document.createElement('p');
   const bio = document.createElement('p');
@@ -88,15 +99,15 @@ function gitUserCard(object) {
   newCardInfo.appendChild(bio);
   profile.appendChild(githubUrl);
 
-  userImg.src = data.avatar_url;
-  name.textContent = data.name;
-  username.textContent = data.login;
-  location.textContent = `Location: ${data.location}`;
+  userImg.src = object.avatar_url;
+  name.textContent = object.name;
+  username.textContent = object.login;
+  location.textContent = `Location: ${object.location}`;
   profile.textContent = 'Profile: ';
-  githubUrl.textContent = data.html_url;
-  followers.textContent = `Followers: ${data.followers}`;
-  following.textContent = `Following: ${data.following}`;
-  bio.textContent = `Bio: ${data.bio}`;
+  githubUrl.textContent = object.html_url;
+  followers.textContent = `Followers: ${object.followers}`;
+  following.textContent = `Following: ${object.following}`;
+  bio.textContent = `Bio: ${object.bio}`;
 
   return newCard;
 }
